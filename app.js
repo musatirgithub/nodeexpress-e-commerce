@@ -5,6 +5,9 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 
+// rest of the packages
+const morgan = require('morgan');
+
 // database
 const connectDB = require('./db/connect');
 
@@ -14,6 +17,7 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 
 
 app.use(express.json());
+app.use(morgan('tiny'));
 
 app.get('/', (req,res)=>{
     res.send('e-commerce api')
