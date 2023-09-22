@@ -1,10 +1,15 @@
-const User = require('../models/User');
+const User = require('../models/user');
 const {StatusCodes} = require('http-status-codes');
+const CustomError = require('../errors');
 
 const register = async (req,res)=>{
-    const user = User.create(req.body)
+    const user = await User.create(req.body)
 
-    res.status(StatusCodes.CREATED).json(user)
+    if(!user){
+        throw new CustomError.BadRequestError('')
+    }
+
+    res.status(StatusCodes.CREATED).json({user})
 }
 
 const login = async (req,res)=>{
