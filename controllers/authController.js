@@ -3,6 +3,7 @@ const User = require('../models/user');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const jwt = require('jsonwebtoken');
+const {createJWT} = require('../utils');
 
 const register = async (req,res)=>{
     const {email, name, password} = req.body;
@@ -18,7 +19,7 @@ const register = async (req,res)=>{
 
     const user = await User.create({email, name, password, role});
     const tokenUser = {name:user.name, userId:user._id, role:user.role};
-    const token = await jwt.sign(tokenUser, 'jwtSecret', {expiresIn:'1d'});
+    const token = createJWT({payload:tokenUser});
 
     // if(!user){
     //     throw new CustomError.BadRequestError('')
