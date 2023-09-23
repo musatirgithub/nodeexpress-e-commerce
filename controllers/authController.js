@@ -1,3 +1,4 @@
+require('dotenv').config();
 const User = require('../models/user');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
@@ -15,13 +16,15 @@ const register = async (req,res)=>{
     const isFirstAccount = await User.countDocuments({}) === 0;
     const role = isFirstAccount? "admin":"user";
 
-    const user = await User.create({email, name, password, role})
+    const user = await User.create({email, name, password, role});
+    const tokenUser = {name:user.name, userId:user._id, role:user.role};
+    const token = await jwt.sign(tokenUser, 'jwtSecret', {expiresIn:'1d'});
 
-    if(!user){
-        throw new CustomError.BadRequestError('')
-    }
+    // if(!user){
+    //     throw new CustomError.BadRequestError('')
+    // }
 
-    res.status(StatusCodes.CREATED).json({user})
+    res.status(StatusCodes.CREATED).json({user:tokenUser, token})
 }
 
 const login = async (req,res)=>{
