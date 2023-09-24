@@ -7,6 +7,7 @@ const app = express();
 
 // rest of the packages
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser'); 
 
 // routers
 const authRouter = require('./routes/authRoutes');
@@ -19,10 +20,12 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 
-app.use(express.json());
 app.use(morgan('tiny'));
+app.use(express.json());
+app.use(cookieParser());
 
-app.get('/', (req,res)=>{
+app.get('/api/v1', (req,res)=>{
+    console.log(req.cookies.token);
     res.send('e-commerce api')
 })
 
