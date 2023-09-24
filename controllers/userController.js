@@ -15,3 +15,5 @@ const updateUser = async (req,res)=>{
 const updateUserPassword = async (req,res)=>{
     res.send('update user password')
 }
+
+module.exports = {getAllUsers, getSingleUser, showCurrentUser, updateUser, updateUserPassword}
