@@ -4,11 +4,21 @@ const {isTokenValid} =require('../utils');
 const authenticateUser = async (req, res, next)=>{
     const token = req.signedCookies.token;
     if(!token){
-        console.log('error, no token present')
-        // throw new CustomError.UnauthenticatedError('')
+        throw new CustomError.UnauthenticatedError('Authentication Invalid')
     }
-    console.log('error, no token present')
+
+    try {
+        const {name, userId, role} = isTokenValid({token});
+        req.user = {name, userId, role}
+        next();
+    } catch (error) {
+        throw new CustomError.UnauthenticatedError('Authentication Invalid')
+    }
+}
+
+const authorizePermission = async (req,res,next)=>{
+    console.log('Admin route');
     next();
 }
 
-module.exports = {authenticateUser};
+module.exports = {authenticateUser, authorizePermission};
