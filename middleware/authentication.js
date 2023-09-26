@@ -10,3 +10,5 @@ const authenticateUser = async (req, res, next)=>{
     console.log('error, no token present')
     next();
 }
+
+module.exports = {authenticateUser};
