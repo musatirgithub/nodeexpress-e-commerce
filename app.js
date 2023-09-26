@@ -19,7 +19,6 @@ const connectDB = require('./db/connect');
 // middleware
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
-const {authenticateUser} = require('./middleware/authentication');
 
 
 app.use(morgan('tiny'));
