@@ -1,6 +1,7 @@
-const {StatusCodes} = require('http-status-codes')
+const {StatusCodes} = require('http-status-codes');
 const User = require('../models/user');
 const CustomError = require('../errors');
+const {createTokenUser} = require('../utils');
 
 
 const getAllUsers = async (req,res)=>{
@@ -8,6 +9,7 @@ const getAllUsers = async (req,res)=>{
     const users = await User.find({role:"user"}).select('-password');
     res.status(StatusCodes.OK).json({users})
 }
+
 const getSingleUser = async (req,res)=>{
     const {id} = req.params;
     const user = await User.findOne({_id:id}).select('-password');
@@ -16,12 +18,20 @@ const getSingleUser = async (req,res)=>{
     }
     res.status(StatusCodes.OK).json({user})
 }
+
 const showCurrentUser = async (req,res)=>{
     res.status(StatusCodes.OK).json({user:req.user});
 }
+
 const updateUser = async (req,res)=>{
-    res.send('update user')
+    const {name, email}=req.body
+    if(!name || !email){
+        throw new CustomError.BadRequestError('Please provide all values!');
+    }
+
+    const newUser = await User.findOneAndUpdate({_id:req.user.userId}, {email,name}, {new:true, runValidators:true});
 }
+
 const updateUserPassword = async (req,res)=>{
     const {oldPassword, newPassword} = req.body
     if(!oldPassword || !newPassword){
