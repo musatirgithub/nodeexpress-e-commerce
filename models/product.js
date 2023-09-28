@@ -18,9 +18,20 @@ const ProductSchema = new mongoose.Schema({
         required:[true, 'Please provide product description'], 
         maxLength:[1000, 'Description cannot excess 1000 characters'],
     },
-    image:{type:String},
-    category:{type:String},
-    company:{type:String},
+    image:{
+        type:String,
+        default:'uploads/example.jpeg'
+    },
+    category:{
+        type:String, 
+        required:[true, 'Please provide product category'], 
+        enum:['office', 'kitchen', 'bedroom'],
+    },
+    company:{
+        type:String, 
+        required:[true, 'Please provide product category'], 
+        enum:['office', 'kitchen', 'bedroom'],
+    },
     colors:{type:[]},
     featured:{type:Boolean},
     freeShipping:{type:Boolean},
