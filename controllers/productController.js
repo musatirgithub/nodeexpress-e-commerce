@@ -7,7 +7,7 @@ const getAllProducts = async (req,res)=>{
     res.send('Get all products')
 }
 const getSingleProduct = async (req,res)=>{
-    res.send('Get single products')
+    res.send('Get single product')
 }
 const updateProduct = async (req,res)=>{
     res.send('Update Product')
