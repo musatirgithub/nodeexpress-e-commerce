@@ -5,6 +5,7 @@ const {createProduct, getAllProducts, getSingleProduct, updateProduct, deletePro
 
 
 router.route('/').get(getAllProducts).post([authenticateUser, authorizePermissions('admin')], createProduct);
-router.route('/:id').get(getSingleProduct).patch(authorizePermissions('admin'), updateProduct).delete(authorizePermissions('admin'), deleteProduct);
+router.route('/uploadImage').post([authenticateUser, authorizePermissions('admin')], uploadImage);
+router.route('/:id').get(getSingleProduct).patch([authenticateUser, authorizePermissions('admin')], updateProduct).delete([authenticateUser, authorizePermissions('admin')], deleteProduct);
 
 module.exports = router;
