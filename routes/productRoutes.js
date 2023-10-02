@@ -5,3 +5,5 @@ const {createProduct, getAllProducts, getSingleProduct, updateProduct, deletePro
 
 router.route('/').get(getAllProducts);
 router.route('/:id').get(getSingleProduct);
+
+module.exports = router;
