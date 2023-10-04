@@ -39,6 +39,9 @@ const deleteProduct = async (req,res)=>{
     res.status(StatusCodes.OK).json({msg:'Success! Product removed!'});
 }
 const uploadImage = async (req,res)=>{
+    if(!req.files){
+        throw new CustomError.BadRequestError('No file uploaded!');
+    }
     res.send('Upload Image')
 }
 module.exports = {createProduct, getAllProducts, getSingleProduct, updateProduct, deleteProduct, uploadImage}
