@@ -1,6 +1,7 @@
 const Product = require('../models/product');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
+const path = require('path');
 
 
 const createProduct = async (req,res)=>{
@@ -51,6 +52,9 @@ const uploadImage = async (req,res)=>{
     if(productImage.size > maxSize){
         throw new CustomError.BadRequestError('Image should be smaller than 1MB');
     }
-    res.send('Upload Image')
+
+    const imagePath = path.join(__dirname, '../public/uploads/'+`${productImage.name}`);
+    await productImage.mv(imagePath);
+    res.status(StatusCodes.OK).json({image:`/uploads/${productImage.name}`});
 }
 module.exports = {createProduct, getAllProducts, getSingleProduct, updateProduct, deleteProduct, uploadImage}
