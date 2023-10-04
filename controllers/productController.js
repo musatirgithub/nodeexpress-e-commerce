@@ -42,6 +42,15 @@ const uploadImage = async (req,res)=>{
     if(!req.files){
         throw new CustomError.BadRequestError('No file uploaded!');
     }
+    const productImage = req.files.image;
+    if(!productImage.mimetype.startsWith('image')){
+        throw new CustomError.BadRequestError('Please upload an image!');
+    }
+
+    const maxSize = 1024 * 1024;
+    if(productImage.size > maxSize){
+        throw new CustomError.BadRequestError('Image should be smaller than 1MB');
+    }
     res.send('Upload Image')
 }
 module.exports = {createProduct, getAllProducts, getSingleProduct, updateProduct, deleteProduct, uploadImage}
