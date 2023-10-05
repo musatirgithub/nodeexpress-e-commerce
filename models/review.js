@@ -7,7 +7,7 @@ const ReviewSchema = mongoose.Schema({
         max:5,
         required:[true, 'Please provide review rating'],
     },
-    rating:{
+    title:{
         type:String,
         trim:true,
         required:[true, 'Please provide review title'],
