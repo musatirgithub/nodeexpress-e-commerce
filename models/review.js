@@ -31,4 +31,18 @@ const ReviewSchema = mongoose.Schema({
 
 ReviewSchema.index({product:1, user:1}, {unique:true});
 
+// Because we wanted to apply the function to schema not to instance, we used statics keyword,
+// If we had wanted to apply the function to an instance instead of statics we had to use methods keyword
+ReviewSchema.statics.calculateAverageRating = async function (productId) {
+    console.log(productId);
+}
+
+ReviewSchema.post('save', async function(){
+    await this.constructor.calculateAverageRating(this.product);
+})
+
+ReviewSchema.post('remove', async function(){
+    await this.constructor.calculateAverageRating(this.product);
+})
+
 module.exports = mongoose.model('Review', ReviewSchema);
