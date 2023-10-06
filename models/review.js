@@ -34,7 +34,22 @@ ReviewSchema.index({product:1, user:1}, {unique:true});
 // Because we wanted to apply the function to schema not to instance, we used statics keyword,
 // If we had wanted to apply the function to an instance instead of statics we had to use methods keyword
 ReviewSchema.statics.calculateAverageRating = async function (productId) {
-    console.log(productId);
+    const result = await this.aggregate([
+        {$match:{product:productId}},
+        {$group:{
+            _id:'$product',
+            averageRating:{$avg:'$rating'},
+            numOfReviews:{$sum:1}
+        }}
+    ])
+    try {
+        await this.model('Product').findOneAndUpdate(
+            {_id:productId}, 
+            {averageRating: Math.ceil(result[0]?.averageRating || 0),
+            numOfReviews: result[0]?.numOfReviews || 0})
+    } catch (error) {
+        
+    }
 }
 
 ReviewSchema.post('save', async function(){
