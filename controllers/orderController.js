@@ -5,6 +5,11 @@ const CustomError = require('../errors');
 const {checkPermissions} = require('../utils');
 const order = require('../models/order');
 
+const fakeStripeAPI = async ({amount, currency})=>{
+    const client_secret = 'someRandomValue';
+    return {client_secret, amount};
+}
+
 const createOrder = async (req,res)=>{
     const {tax, shippingFee, items:cartItems} = req.body;
 
@@ -37,9 +42,18 @@ const createOrder = async (req,res)=>{
         // calculate subtotal
         subtotal += item.amount * price;
     }
-    console.log(orderItems)
-    console.log(subtotal)
-    res.send('create product');
+    // calculate total
+    const total = tax + shippingFee + subtotal
+    // get client secret (this is a fake function for real stripe connection see stripe videos)
+    const paymentIntent = await fakeStripeAPI({
+        amount:total,
+        currency:'usd'
+    })
+
+    const order = await Order.create({
+        orderItems, total, subtotal, tax, shippingFee, clientSecret:paymentIntent.client_secret, user:req.user.userId
+    })
+    res.status(StatusCodes.CREATED).json({order, clientSecret:order.clientSecret})
 }
 
 const getAllOrders = async (req,res)=>{
