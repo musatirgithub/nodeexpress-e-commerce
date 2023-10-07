@@ -1,5 +1,29 @@
 const mongoose = require('mongoose');
 
+const singleCartItemSchema = mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+    },
+    image:{
+        type:String,
+        required:true,
+    },
+    price:{
+        type:Number,
+        required:true,
+    },
+    amount:{
+        type:Number,
+        required:true,
+    },
+    product:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Product',
+        required:true,
+    }
+})
+
 
 const orderSchema = mongoose.model({
     tax:{
@@ -18,7 +42,7 @@ const orderSchema = mongoose.model({
         type:Number,
         required:true,
     },
-    cartItems: [],
+    cartItems: [singleCartItemSchema],
     status:{
         type:String,
         enum:['pending', 'failed', 'paid', 'delivered', 'canceled'],
