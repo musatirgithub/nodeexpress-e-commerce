@@ -25,7 +25,7 @@ const singleCartItemSchema = mongoose.Schema({
 })
 
 
-const orderSchema = mongoose.model({
+const orderSchema = mongoose.Schema({
     tax:{
         type:Number,
         required:true,
