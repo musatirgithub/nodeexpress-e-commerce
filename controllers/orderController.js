@@ -92,6 +92,7 @@ const updateOrder = async (req,res)=>{
     order.paymentIntentId = paymentIntentId;
     order.status = 'paid';
     await order.save();
+    res.status(StatusCodes.OK).json({order})
 }
 
 module.exports = {getAllOrders, getSingleOrder, getCurrentUserOrders, createOrder, updateOrder}
