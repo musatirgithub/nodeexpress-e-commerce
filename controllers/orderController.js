@@ -58,9 +58,6 @@ const createOrder = async (req,res)=>{
 
 const getAllOrders = async (req,res)=>{
     const orders = await Order.find({});
-    if(!orders){
-        throw new CustomError.NotFoundError('No orders found')
-    }
     res.status(StatusCodes.OK),json({orders, count:orders.length});
 }
 
@@ -70,11 +67,15 @@ const getSingleOrder = async (req,res)=>{
     if(!order){
         throw new CustomError.NotFoundError(`No order with id: ${orderId}`)
     }
+
+    checkPermissions(req.user, order.user);
+
     res.status(StatusCodes.OK).json({order});
 }
 
 const getCurrentUserOrders = async (req,res)=>{
-    res.send('get current user orders');
+    const orders = await Order.find({user:req.user.userId});
+    res.status(StatusCodes.OK).json({orders, count:orders.length});
 }
 
 const updateOrder = async (req,res)=>{
