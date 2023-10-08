@@ -57,7 +57,11 @@ const createOrder = async (req,res)=>{
 }
 
 const getAllOrders = async (req,res)=>{
-    res.send('get all orders');
+    const orders = await Order.find({});
+    if(!orders){
+        throw new CustomError.NotFoundError('No orders found')
+    }
+    res.status(StatusCodes.OK),json({orders, count:orders.length});
 }
 
 const getSingleOrder = async (req,res)=>{
